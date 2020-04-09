@@ -3,7 +3,6 @@
 #import "BEMServerSyncConfig.h"
 #import "BEMServerSyncConfigManager.h"
 #import "LocalNotificationManager.h"
-#import <Parse/Parse.h>
 #import "DataUtils.h"
 #import "BEMBuiltinUserCache.h"
 
@@ -68,18 +67,6 @@
         [DataUtils dictToWrapper:newDict wrapper:newCfg];
         [BEMServerSyncConfigManager updateConfig:newCfg];
         [BEMServerSyncPlugin applySync];
-        
-        PFInstallation* currentInstallation = [PFInstallation currentInstallation];
-        [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (succeeded) {
-                [LocalNotificationManager addNotification:[NSString stringWithFormat:
-                                                           @"Successfully changed channel to %ld for installation", newCfg.sync_interval]];
-            } else {
-                [LocalNotificationManager addNotification:[NSString stringWithFormat:
-                                                           @"Error %@ while changing channel to %ldfor installation", error.description, newCfg.sync_interval] showUI:TRUE];
-                @throw error;
-            }
-        }];
         CDVPluginResult* result = [CDVPluginResult
                                    resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:result callbackId:callbackId];
@@ -98,16 +85,10 @@
 {
     if ([BEMServerSyncConfigManager instance].ios_use_remote_push) {
         NSString* channel = [NSString stringWithFormat:@"interval_%@", @([BEMServerSyncConfigManager instance].sync_interval)];
-        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-        [currentInstallation removeObjectForKey:@"channels"];
-        [currentInstallation addUniqueObject:channel forKey:@"channels"];
         [LocalNotificationManager addNotification:[NSString stringWithFormat:
                                                    @"For remotePush, setting channel = %@", channel] showUI:TRUE];
     } else {
         [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:[BEMServerSyncConfigManager instance].sync_interval];
-        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-        [currentInstallation removeObjectForKey:@"channels"];
-
     }
 }
 
