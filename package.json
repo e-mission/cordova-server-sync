@@ -1,13 +1,13 @@
 {
-  "name": "em-cordova-server-sync",
-  "version": "1.0.2",
+  "name": "cordova-plugin-em-serversync",
+  "version": "1.2.3",
   "description": "Simple package that stores all the connection settings that need to be configured",
+  "license": "BSD-3-clause",
   "cordova": {
-    "id": "em-cordova-server-sync",
+    "id": "cordova-plugin-em-serversync",
     "platforms": [
       "android",
-      "ios",
-      "windows"
+      "ios"
     ]
   },
   "repository": {
@@ -29,7 +29,7 @@
     },
     {
       "name": "cordova-android",
-      "version": ">=6.0.0"
+      "version": ">=7.0.0"
     },
     {
       "name": "android-sdk",
@@ -41,7 +41,6 @@
     }
   ],
   "author": "K. Shankari",
-  "license": "BSD 3-clause",
   "bugs": {
     "url": "https://github.com/e-mission/cordova-server-sync/issues"
   },
