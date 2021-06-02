@@ -12,5 +12,6 @@
 typedef void (^CombinedArrayHandler)(NSArray* combinedArrayHandler);
 
 @interface BEMActivitySync: NSObject
++ (void) initWithConsent;
 + (void) getCombinedArray:(NSArray*)locationArray withHandler:(CombinedArrayHandler)completionArray;
 @end
