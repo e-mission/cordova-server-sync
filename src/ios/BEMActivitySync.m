@@ -14,12 +14,40 @@
 #import "BEMBuiltinUserCache.h"
 #import "SimpleLocation.h"
 #import "TimeQuery.h"
+#import "TripDiarySettingsCheck.h"
 #import "MotionActivity.h"
 #import "BEMServerSyncCommunicationHelper.h"
 #import "LocationTrackingConfig.h"
 #import <CoreMotion/CoreMotion.h>
 
 @implementation BEMActivitySync
+
++ (void) initWithConsent {
+    CMMotionActivityManager* activityMgr = [[CMMotionActivityManager alloc] init];
+    NSOperationQueue* mq = [NSOperationQueue mainQueue];
+    NSDate* startDate = [NSDate new];
+    NSTimeInterval dayAgoSecs = 24 * 60 * 60;
+    NSDate* endDate = [NSDate dateWithTimeIntervalSinceNow:-(dayAgoSecs)];
+    [activityMgr queryActivityStartingFromDate:startDate toDate:endDate toQueue:mq withHandler:^(NSArray *activities, NSError *error) {
+        if (error == nil) {
+            [LocalNotificationManager addNotification:@"activity recognition works fine"];
+        } else {
+            [LocalNotificationManager addNotification:[NSString stringWithFormat:@"Error %@ while reading activities, travel mode detection may be unavailable", error]];
+            NSString* title = NSLocalizedStringFromTable(@"error-reading-activities", @"DCLocalizable", nil);
+            NSString* message = NSLocalizedStringFromTable(@"travel-mode-unavailable", @"DCLocalizable", nil);
+
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:title
+                                       message:message
+                                       preferredStyle:UIAlertControllerStyleAlert];
+
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                handler:^(UIAlertAction * action) {
+            }];
+            [alert addAction:defaultAction];
+            [TripDiarySettingsCheck showSettingsAlert:alert];
+        }
+    }];
+}
 
 + (void) getCombinedArray:(NSArray*) locationArray withHandler:(CombinedArrayHandler)completionHandler {
     /*
