@@ -14,7 +14,6 @@
 #import "BEMBuiltinUserCache.h"
 #import "SimpleLocation.h"
 #import "TimeQuery.h"
-#import "SensorControlBackgroundChecker.h"
 #import "MotionActivity.h"
 #import "BEMServerSyncCommunicationHelper.h"
 #import "LocationTrackingConfig.h"
