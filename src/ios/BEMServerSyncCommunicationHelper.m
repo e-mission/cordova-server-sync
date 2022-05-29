@@ -112,9 +112,8 @@ static NSString* kSetStatsPath = @"/stats/set";
     NSMutableDictionary *toPush = [[NSMutableDictionary alloc] init];
     [toPush setObject:entriesToPush forKey:@"phone_to_server"];
     
-    NSURL* kBaseURL = [[ConnectionSettings sharedInstance] getConnectUrl];
-    NSURL* kUsercachePutURL = [NSURL URLWithString:kUsercachePutPath
-                                 relativeToURL:kBaseURL];
+    NSString* kBaseURLString = [[ConnectionSettings sharedInstance] getConnectString];
+    NSURL* kUsercachePutURL = [NSURL URLWithString:[kBaseURLString stringByAppendingString:kUsercachePutPath]];
     
     CommunicationHelper *executor = [[CommunicationHelper alloc] initPost:kUsercachePutURL data:toPush completionHandler:completionHandler];
     [executor execute];
@@ -214,9 +213,8 @@ static NSString* kSetStatsPath = @"/stats/set";
 +(void)server_to_phone:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
     NSLog(@"CommunicationHelper.server_to_phone called!");
     NSMutableDictionary *blankDict = [[NSMutableDictionary alloc] init];
-    NSURL* kBaseURL = [[ConnectionSettings sharedInstance] getConnectUrl];
-    NSURL* kUsercacheGetURL = [NSURL URLWithString:kUsercacheGetPath
-                                            relativeToURL:kBaseURL];
+    NSString* kBaseURLString = [[ConnectionSettings sharedInstance] getConnectString];
+    NSURL* kUsercacheGetURL = [NSURL URLWithString:[kBaseURLString stringByAppendingString:kUsercacheGetPath]];
     CommunicationHelper *executor = [[CommunicationHelper alloc] initPost:kUsercacheGetURL data:blankDict completionHandler:completionHandler];
     [executor execute];
 }
