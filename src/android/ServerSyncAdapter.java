@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import edu.berkeley.eecs.emission.cordova.connectionsettings.ConnectionSettings;
-import edu.berkeley.eecs.emission.cordova.jwtauth.AuthTokenCreationFactory;
-import edu.berkeley.eecs.emission.cordova.jwtauth.AuthTokenCreator;
+import edu.berkeley.eecs.emission.cordova.opcodeauth.AuthTokenCreationFactory;
+import edu.berkeley.eecs.emission.cordova.opcodeauth.AuthTokenCreator;
 import edu.berkeley.eecs.emission.cordova.tracker.location.TripDiaryStateMachineReceiver;
 import edu.berkeley.eecs.emission.cordova.tracker.sensors.BatteryUtils;
 import edu.berkeley.eecs.emission.R;
