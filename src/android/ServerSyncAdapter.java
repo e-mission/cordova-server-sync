@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import edu.berkeley.eecs.emission.cordova.connectionsettings.ConnectionSettings;
-import edu.berkeley.eecs.emission.cordova.jwtauth.AuthTokenCreationFactory;
-import edu.berkeley.eecs.emission.cordova.jwtauth.AuthTokenCreator;
+import edu.berkeley.eecs.emission.cordova.opcodeauth.AuthTokenCreationFactory;
+import edu.berkeley.eecs.emission.cordova.opcodeauth.AuthTokenCreator;
 import edu.berkeley.eecs.emission.cordova.tracker.location.TripDiaryStateMachineReceiver;
 import edu.berkeley.eecs.emission.cordova.tracker.sensors.BatteryUtils;
 import edu.berkeley.eecs.emission.R;
@@ -105,7 +105,7 @@ public class ServerSyncAdapter extends AbstractThreadedSyncAdapter {
 		AuthTokenCreator ac = AuthTokenCreationFactory.getInstance(cachedContext);
 		// Get the list of uncategorized trips from the server
 		// hardcoding the URL and the userID for now since we are still using fake data
-		String userName = ac.getUserEmail().await().getEmail();
+		String userName = ac.getOPCode().await().getEmail();
 		System.out.println("real user name = "+userName);
 
 		if (userName == null || userName.trim().length() == 0) {
