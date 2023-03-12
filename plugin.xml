@@ -53,7 +53,9 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
         <service
-            android:name="edu.berkeley.eecs.emission.cordova.serversync.AuthenticatorService">
+            android:name="edu.berkeley.eecs.emission.cordova.serversync.AuthenticatorService"
+            android:enabled="true"
+            android:exported="false">
         	<intent-filter>
             	<action android:name="android.accounts.AccountAuthenticator"/>
         	</intent-filter>
