@@ -105,7 +105,7 @@ public class ServerSyncAdapter extends AbstractThreadedSyncAdapter {
 		AuthTokenCreator ac = AuthTokenCreationFactory.getInstance(cachedContext);
 		// Get the list of uncategorized trips from the server
 		// hardcoding the URL and the userID for now since we are still using fake data
-		String userName = ac.getOPCode().await().getEmail();
+		String userName = ac.getOPCode().await().getOPCode();
 		System.out.println("real user name = "+userName);
 
 		if (userName == null || userName.trim().length() == 0) {
@@ -114,7 +114,7 @@ public class ServerSyncAdapter extends AbstractThreadedSyncAdapter {
 			return;
 		}
 		// First, get a token so that we can make the authorized calls to the server
-		String userToken = ac.getServerToken().await().getToken();
+		String userToken = ac.getOPCode().await().getOPCode();
 
 
 		/*
