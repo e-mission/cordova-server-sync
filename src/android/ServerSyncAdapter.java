@@ -176,13 +176,6 @@ public class ServerSyncAdapter extends AbstractThreadedSyncAdapter {
 					new StatsEvent(cachedContext, R.string.pull_duration));
 		}
 
-		// We are sending this only locally, so we don't care about the URI and so on.
-        Intent localIntent = new Intent("edu.berkeley.eecs.emission.sync.NEW_DATA");
-        Bundle b = new Bundle();
-        b.putString( "userdata", "{}" );
-        localIntent.putExtras(b);
-        Log.i(cachedContext, TAG, "Finished sync, sending local broadcast");
-        LocalBroadcastManager.getInstance(cachedContext).sendBroadcastSync(localIntent);
 		biuc.putMessage(R.string.key_usercache_client_time,
 				new StatsEvent(cachedContext, R.string.sync_duration, to.elapsedSecs()));
 	}

@@ -171,18 +171,7 @@ static NSString* kSetStatsPath = @"/stats/set";
                 StatsEvent* se = [[StatsEvent alloc] initForReading:@"sync_pull_list_size" withReading:newSectionCount];
                 [[BuiltinUserCache database] putMessage:@"key.usercache.client_time" value:se];
 
-                if (newSectionCount > 0) {
-                    // Note that we need to update the UI before calling the completion handler, otherwise
-                    // when the view appears, users won't see the newly fetched data!
-                    [[NSNotificationCenter defaultCenter] postNotificationName:BackgroundRefreshNewData
-                                                                        object:self];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"edu.berkeley.eecs.emission.sync.NEW_DATA"
-                                                                        object:nil
-                                                                      userInfo:nil];
-                    [task setResult:@(TRUE)];
-                } else {
-                    [task setResult:@(TRUE)];
-                }
+                [task setResult:@(TRUE)];
             }
             StatsEvent* se = [[StatsEvent alloc] initForReading:@"pull_duration" withReading:[t elapsed_secs]];
             [[BuiltinUserCache database] putMessage:@"key.usercache.client_time" value:se];
