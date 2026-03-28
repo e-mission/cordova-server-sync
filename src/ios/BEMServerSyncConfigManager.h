@@ -12,6 +12,6 @@
 @interface BEMServerSyncConfigManager : NSObject
 
 + (BEMServerSyncConfig*) instance;
-+ (void) updateConfig:(BEMServerSyncConfig*) newConfig;
++ (void) updateSyncConfig:(BEMServerSyncConfig*) newSyncConfig;
 
 @end

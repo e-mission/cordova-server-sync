@@ -8,10 +8,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import edu.berkeley.eecs.emission.cordova.comm.CommunicationHelper;
 import edu.berkeley.eecs.emission.cordova.connectionsettings.ConnectionSettings;
 
-public class CommunicationHelper {
-    public static final String TAG = "CommunicationHelper";
+public class ServerSyncCommunicationHelper {
+    public static final String TAG = "ServerSyncCommunicationHelper";
 
     /*
      * Gets user cache information from server
@@ -21,7 +22,7 @@ public class CommunicationHelper {
             throws IOException, JSONException {
         String commuteTrackerHost = ConnectionSettings.getConnectURL(cachedContext);
         String fullURL = commuteTrackerHost + "/usercache/get";
-        String rawJSON = edu.berkeley.eecs.emission.cordova.comm.CommunicationHelper.getUserPersonalData(
+        String rawJSON = CommunicationHelper.getUserPersonalData(
                 cachedContext, fullURL, userToken);
         if (rawJSON.trim().length() == 0) {
             // We didn't get anything from the server, so let's return an empty array for now
@@ -38,7 +39,7 @@ public class CommunicationHelper {
     public static void phone_to_server(Context cachedContext, String userToken, JSONArray entryArr)
             throws IOException, JSONException {
         String commuteTrackerHost = ConnectionSettings.getConnectURL(cachedContext);
-        edu.berkeley.eecs.emission.cordova.comm.CommunicationHelper.pushJSON(
+        CommunicationHelper.pushJSON(
                 cachedContext, commuteTrackerHost + "/usercache/put",
                 userToken, "phone_to_server", entryArr);
     }

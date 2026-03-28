@@ -65,7 +65,7 @@
         NSDictionary* newDict = [[command arguments] objectAtIndex:0];
         BEMServerSyncConfig* newCfg = [BEMServerSyncConfig new];
         [DataUtils dictToWrapper:newDict wrapper:newCfg];
-        [BEMServerSyncConfigManager updateConfig:newCfg];
+        [BEMServerSyncConfigManager updateSyncConfig:newCfg];
         [BEMServerSyncPlugin applySync];
         CDVPluginResult* result = [CDVPluginResult
                                    resultWithStatus:CDVCommandStatus_OK];

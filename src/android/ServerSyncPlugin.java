@@ -85,7 +85,7 @@ public class ServerSyncPlugin extends CordovaPlugin {
             return true;
         } else if (action.equals("getConfig")) {
             Context ctxt = cordova.getActivity();
-            ServerSyncConfig cfg = ConfigManager.getConfig(ctxt);
+            ServerSyncConfig cfg = ServerSyncConfigManager.getSyncConfig(ctxt);
             // Gson.toJson() represents a string and we are expecting an object in the interface
             callbackContext.success(new JSONObject(new Gson().toJson(cfg)));
             return true;
@@ -93,7 +93,7 @@ public class ServerSyncPlugin extends CordovaPlugin {
             Context ctxt = cordova.getActivity();
             JSONObject newConfig = data.getJSONObject(0);
             ServerSyncConfig cfg = new Gson().fromJson(newConfig.toString(), ServerSyncConfig.class);
-            ConfigManager.updateConfig(ctxt, cfg);
+            ServerSyncConfigManager.updateSyncConfig(ctxt, cfg);
             restartSync(ctxt);
             callbackContext.success();
             return true;
@@ -105,9 +105,9 @@ public class ServerSyncPlugin extends CordovaPlugin {
 
     protected void restartSync(Context ctxt) {
         System.out.println("Starting sync with interval "+
-                ConfigManager.getConfig(ctxt).getSyncInterval());
+                ServerSyncConfigManager.getSyncConfig(ctxt).getSyncInterval());
         ContentResolver.addPeriodicSync(mAccount, AUTHORITY, unusedExtras,
-                ConfigManager.getConfig(ctxt).getSyncInterval());
+                ServerSyncConfigManager.getSyncConfig(ctxt).getSyncInterval());
     }
 
 
