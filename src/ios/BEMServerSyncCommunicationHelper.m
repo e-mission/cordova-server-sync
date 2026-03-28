@@ -11,6 +11,7 @@
 #import <objc/runtime.h>
 #import "LocalNotificationManager.h"
 
+#import "BEMTrackingConfigManager.h"
 #import "SimpleLocation.h"
 #import "TimeQuery.h"
 #import "MotionActivity.h"
@@ -85,32 +86,47 @@ static NSString* kSetStatsPath = @"/stats/set";
                                                    @"No data to send, returning early"] showUI:FALSE];
     } else {
         [self phone_to_server:entriesToPush
-                             completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                                 // Only delete trips after they have been successfully pushed
-                                 if (error == nil) {
-                                 [LocalNotificationManager addNotification:[NSString stringWithFormat:
-                                                                            @"successfully pushed %ld entries to the server",
-                                                                            (unsigned long)entriesToPush.count]
-                                                                    showUI:TRUE];
-                                     [[BuiltinUserCache database] clearEntries:tq];
-                                     // rw-docs are pushed like entries, so let's handle them here
-                                     [[BuiltinUserCache database] clearSupersededRWDocs:tq];
-                                     StatsEvent* se = [[StatsEvent alloc] initForReading:@"push_duration" withReading:[t elapsed_secs]];
-                                     [[BuiltinUserCache database] putMessage:@"key.usercache.client_time" value:se];
-                                 } else {
-                                     [LocalNotificationManager addNotification:[NSString stringWithFormat:
-                                                                                @"Got error %@ while pushing changes to server, retaining data", error] showUI:TRUE];
-                                     StatsEvent* se = [[StatsEvent alloc] initForReading:@"push_duration" withReading:[t elapsed_secs]];
-                                     [[BuiltinUserCache database] putMessage:@"key.usercache.client_time" value:se];
-                                 }
-                                 [task setResult:@(TRUE)];
-                             }];
+            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                // Only delete trips after they have been successfully pushed
+                if (error == nil) {
+                    [LocalNotificationManager addNotification:[NSString stringWithFormat: @"successfully pushed %ld entries to the server",
+                                                                        (unsigned long)entriesToPush.count]
+                                              showUI:TRUE];
+                    [[BuiltinUserCache database] clearEntries:tq];
+                    // rw-docs are pushed like entries, so let's handle them here
+                    [[BuiltinUserCache database] clearSupersededRWDocs:tq];
+                    StatsEvent* se = [[StatsEvent alloc] initForReading:@"push_duration" withReading:[t elapsed_secs]];
+                    [[BuiltinUserCache database] putMessage:@"key.usercache.client_time" value:se];
+
+                    // if response data JSON has "deployment_config", call BEMTrackingConfigManager upgradeDeploymentConfig
+                    NSError *parseError = nil;
+                    NSDictionary *dataDict = [NSJSONSerialization JSONObjectWithData:data
+                                                                  options:0
+                                                                  error:&parseError];
+                    if (parseError == nil && dataDict[@"deployment_config"] != nil) {
+                        [BEMTrackingConfigManager upgradeDeploymentConfig:dataDict[@"deployment_config"]];
+                    }
+                } else {
+                    [LocalNotificationManager addNotification:[NSString stringWithFormat: @"Got error %@ while pushing changes to server, retaining data", error] showUI:TRUE];
+                    StatsEvent* se = [[StatsEvent alloc] initForReading:@"push_duration" withReading:[t elapsed_secs]];
+                    [[BuiltinUserCache database] putMessage:@"key.usercache.client_time" value:se];
+                }
+                [task setResult:@(TRUE)];
+            }];
     }
 }
 
 +(void)phone_to_server:(NSArray *)entriesToPush completionHandler:(void (^)(NSData *data, NSURLResponse *response, NSError *error))completionHandler {
     NSMutableDictionary *toPush = [[NSMutableDictionary alloc] init];
     [toPush setObject:entriesToPush forKey:@"phone_to_server"];
+
+    NSDictionary *config = [BEMTrackingConfigManager getDeploymentConfig];
+    [toPush setObject:config[@"version"] forKey:@"deployment_config_version"];
+    
+    NSString *emissionInfoPath = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
+    NSDictionary *infoDict = [[NSDictionary alloc] initWithContentsOfFile:emissionInfoPath];
+    NSString* appVersion = [infoDict objectForKey:@"CFBundleShortVersionString"];
+    [toPush setObject:appVersion forKey:@"app_version"];
     
     NSString* kBaseURLString = [[ConnectionSettings sharedInstance] getConnectString];
     NSURL* kUsercachePutURL = [NSURL URLWithString:[kBaseURLString stringByAppendingString:kUsercachePutPath]];
