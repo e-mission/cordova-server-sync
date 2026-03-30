@@ -15,6 +15,7 @@ static BEMServerSyncConfig *_instance;
 
 @implementation BEMServerSyncConfigManager
 
+// corresponds to getSyncConfig in ServerSyncConfigManager.java
 + (BEMServerSyncConfig*) instance {
     if (_instance == NULL) {
         _instance = [self readFromCache];
@@ -32,9 +33,9 @@ static BEMServerSyncConfig *_instance;
     return (BEMServerSyncConfig*)[[BuiltinUserCache database] getDocument:SENSOR_CONFIG_KEY wrapperClass:[BEMServerSyncConfig class]];
 }
 
-+ (void) updateConfig:(BEMServerSyncConfig*) newConfig {
-    [[BuiltinUserCache database] putReadWriteDocument:SENSOR_CONFIG_KEY value:newConfig];
-    _instance = newConfig;
++ (void) updateSyncConfig:(BEMServerSyncConfig*) newSyncConfig {
+    [[BuiltinUserCache database] putReadWriteDocument:SENSOR_CONFIG_KEY value:newSyncConfig];
+    _instance = newSyncConfig;
 }
 
 @end

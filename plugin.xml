@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
         id="cordova-plugin-em-serversync"
-        version="1.3.3">
+        version="1.3.4">
 
   <name>ServerSync</name>
   <description>Push and pull local data to the server</description>
@@ -84,9 +84,9 @@
     <source-file src="src/android/ServerSyncAdapter.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
     <source-file src="src/android/StubContentProvider.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
     <source-file src="src/android/SyncService.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
-    <source-file src="src/android/CommunicationHelper.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
+    <source-file src="src/android/ServerSyncCommunicationHelper.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
     <source-file src="src/android/ServerSyncPlugin.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
-    <source-file src="src/android/ConfigManager.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
+    <source-file src="src/android/ServerSyncConfigManager.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
     <source-file src="src/android/ServerSyncConfig.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
     <source-file src="src/android/ServerSyncUtil.java" target-dir="src/edu/berkeley/eecs/emission/cordova/serversync"/>
     <resource-file src="res/android/authenticator.xml" target="res/xml/authenticator.xml"/>

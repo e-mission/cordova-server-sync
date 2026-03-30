@@ -10,20 +10,20 @@ import edu.berkeley.eecs.emission.cordova.usercache.UserCacheFactory;
  * Created by shankari on 3/25/16.
  */
 
-public class ConfigManager {
-    private static ServerSyncConfig cachedConfig;
+public class ServerSyncConfigManager {
+    private static ServerSyncConfig cachedSyncConfig;
 
-    public static ServerSyncConfig getConfig(Context context) {
-        if (cachedConfig == null) {
-            cachedConfig = readFromCache(context);
-            if (cachedConfig == null) {
+    public static ServerSyncConfig getSyncConfig(Context context) {
+        if (cachedSyncConfig == null) {
+            cachedSyncConfig = readFromCache(context);
+            if (cachedSyncConfig == null) {
                 // This is still NULL, which means that there is no document in the usercache.
                 // Let us set it to the default settings
                 // we don't want to save it to the database because then it will look like a user override
-                cachedConfig = new ServerSyncConfig();
+                cachedSyncConfig = new ServerSyncConfig();
             }
         }
-        return cachedConfig;
+        return cachedSyncConfig;
     }
 
     private static ServerSyncConfig readFromCache(Context context) {
@@ -31,9 +31,9 @@ public class ConfigManager {
                 .getDocument(R.string.key_usercache_sync_config, ServerSyncConfig.class);
     }
 
-    protected static void updateConfig(Context context, ServerSyncConfig newConfig) {
+    protected static void updateSyncConfig(Context context, ServerSyncConfig newSyncConfig) {
         UserCacheFactory.getUserCache(context)
-                .putReadWriteDocument(R.string.key_usercache_sync_config, newConfig);
-        cachedConfig = newConfig;
+                .putReadWriteDocument(R.string.key_usercache_sync_config, newSyncConfig);
+        cachedSyncConfig = newSyncConfig;
     }
 }

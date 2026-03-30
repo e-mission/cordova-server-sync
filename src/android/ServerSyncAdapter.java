@@ -133,7 +133,7 @@ public class ServerSyncAdapter extends AbstractThreadedSyncAdapter {
 			if (entriesToPush.length() == 0) {
 				System.out.println("No data to send, returning early!");
 			} else {
-				CommunicationHelper.phone_to_server(cachedContext, userToken, entriesToPush);
+				ServerSyncCommunicationHelper.phone_to_server(cachedContext, userToken, entriesToPush);
 				UserCache.TimeQuery tq = BuiltinUserCache.getTimeQuery(cachedContext, entriesToPush);
 				biuc.clearEntries(tq);
 				biuc.clearSupersededRWDocs(tq);
@@ -160,7 +160,7 @@ public class ServerSyncAdapter extends AbstractThreadedSyncAdapter {
 			Timer t = new Timer();
 			UserCache.TimeQuery tq = new UserCache.TimeQuery("write_ts", 0, System.currentTimeMillis()/1000);
 			biuc.clearObsoleteDocs(tq);
-			JSONArray entriesReceived = edu.berkeley.eecs.emission.cordova.serversync.CommunicationHelper.server_to_phone(
+			JSONArray entriesReceived = ServerSyncCommunicationHelper.server_to_phone(
 					cachedContext, userToken);
 			biuc.sync_server_to_phone(entriesReceived);
 			biuc.checkAfterPull();
