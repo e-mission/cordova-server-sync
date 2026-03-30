@@ -11,6 +11,7 @@ import java.io.IOException;
 import edu.berkeley.eecs.emission.cordova.comm.CommunicationHelper;
 import edu.berkeley.eecs.emission.cordova.connectionsettings.ConnectionSettings;
 import edu.berkeley.eecs.emission.cordova.tracker.TrackingConfigManager;
+import edu.berkeley.eecs.emission.cordova.unifiedlogger.Log;
 
 public class ServerSyncCommunicationHelper {
     public static final String TAG = "ServerSyncCommunicationHelper";
@@ -52,7 +53,7 @@ public class ServerSyncCommunicationHelper {
             String appVersion = cachedContext.getPackageManager().getPackageInfo(cachedContext.getPackageName(), 0).versionName;
             toPush.put("app_version", appVersion);
         } catch (Exception e) {
-            Log.e(TAG, "Error getting app version", e);
+            Log.e(cachedContext, TAG, "Error getting app version, not including in push");
         }
 
         String rawJSON = CommunicationHelper.pushGetJSON(cachedContext, commuteTrackerHost + "/usercache/put", toPush);
